@@ -1,17 +1,53 @@
 package intership.dev.contact;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+
+import intership.dev.fragment.ListUserFragment;
 
 
-public class MainActivity extends ActionBarActivity {
-
+public class MainActivity extends Activity {
+    public static FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CustomActionBar();
+        display_fragment(0);
+    }
+    public void CustomActionBar() {
+        ActionBar mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+       mActionBar.setDisplayShowTitleEnabled(false);
+       mActionBar.setHomeButtonEnabled(false);
+        mActionBar.setCustomView(R.layout.custom_actionbar);
+        ImageView imageleft = (ImageView) mActionBar.getCustomView().findViewById(R.id.imgMuiTenLeft);
+        imageleft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                display_fragment(0);
+            }
+        });
+
+        mActionBar.setDisplayShowCustomEnabled(true);
+    }
+
+    public void display_fragment(int pos) {
+        Fragment fragment = null;
+        switch (pos) {
+            case 0:
+                fragment = new ListUserFragment();
+                break;
+        }
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fra, fragment).commit();
     }
 
     @Override
@@ -29,9 +65,7 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
